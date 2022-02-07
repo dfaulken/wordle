@@ -18,6 +18,28 @@ Based on the feedback that you enter, suggests optimal followup guesses. You can
 
 Lather, rinse, repeat.
 
+Example:
+
+```
+$ ruby solve.rb
+I suggest: stare
+What word will you try? fuzzy
+How did that word do? (bgy): bbbbb
+I suggest: stare
+What word will you try? stare
+How did that word do? (bgy): bbbby
+I suggest: melon
+What word will you try? melon
+How did that word do? (bgy): bggyb
+I suggest: cello
+What word will you try? cello
+How did that word do? (bgy): bgggg
+I suggest: hello
+What word will you try? hello
+How did that word do? (bgy): ggggg
+Nice! We got it in 5!
+```
+
 ### What does 'optimal' mean?
 
 This is why I call the solution naive. Unlike more sophisticated ideas that use information theory and entropy, this evaluates each word in the candidate list to see how many yellows or greens would be produced by guessing each word, when compared to the rest of the candidate list.
