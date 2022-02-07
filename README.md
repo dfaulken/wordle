@@ -55,5 +55,4 @@ $ ruby test.rb quilt OCEAN
 ```
 
 The single-word test method gives nice (I think) colorized output:
-
-![image](https://user-images.githubusercontent.com/3988134/152879507-7bd77054-e59f-49e2-8332-a0a9fb8745a7.png)
+![image](https://user-images.githubusercontent.com/3988134/152879645-80a12c54-fc4d-4078-a5a5-b55d124c2f1e.png)
