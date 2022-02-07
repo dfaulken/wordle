@@ -24,7 +24,7 @@ This is why I call the solution naive. Unlike more sophisticated ideas that use 
 
 This is not necessarily the same (in fact, usually not the same) as actually evaluating which word would give the player the most information.
 
-However, at an average guess rate of 3.6-ish, as compared to the (unproven-but-demonstrable) 'optimal' of around 3.3, it's pretty good.
+However, at an average guess rate of 3.6-ish, as compared to the (unproven-but-demonstrable) 'optimal' of around 3.3, it's pretty good for what I was hoping to achieve on a first try.
 
 ## Testing
 
@@ -55,4 +55,5 @@ $ ruby test.rb quilt OCEAN
 ```
 
 The single-word test method gives nice (I think) colorized output:
+
 ![image](https://user-images.githubusercontent.com/3988134/152879645-80a12c54-fc4d-4078-a5a5-b55d124c2f1e.png)
