@@ -1,3 +1,5 @@
+require 'pry-byebug'
+
 class Solver
   VALID_INPUT_LENGTH = 5
   VALID_INPUT_CHARACTERS = %w[b g y]
@@ -50,7 +52,8 @@ class Solver
     @guesses[guess_word] = guess_result
     if guess_result.include? 'b'
       guess_result.each_char.with_index do |result_char, word_index|
-        if result_char == 'b'
+        # Only eliminate a letter if it isn't green or yellow somewhere else in the word.
+        if result_char == 'b' && guess_word.each_char.count(guess_word[word_index]) == 1
           @eliminated_letters << guess_word[word_index]
         end
       end
@@ -106,6 +109,18 @@ class Solver
       elsif result_char == 'y'
         return false unless word.include? guess_letter
         return false if word[word_index] == guess_letter
+      elsif result_char == 'b' && guess_word.count(guess_letter) > 1
+        # If guess letter is already green somewhere else in guess word,
+        # but black at this index,
+        # guess word contains too many of guess letter.
+        guess_word_guess_letter_results = guess_word.each_char.with_index.map do |guess_word_char, guess_word_index|
+          guess_result[guess_word_index] if guess_word_char == guess_letter
+        end.compact
+        okay_guess_letter_count = guess_word_guess_letter_results.count('g') + guess_word_guess_letter_results.count('y')
+        guess_word_has_too_many_guess_letter = guess_word_guess_letter_results.include? 'b'
+        # If word also contains too many of guess letter, reject.  
+        word_has_too_many_guess_letter = word.each_char.count(guess_letter) > okay_guess_letter_count 
+        return false if guess_word_has_too_many_guess_letter && word_has_too_many_guess_letter
       end
     end
     return true

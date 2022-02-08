@@ -1,5 +1,6 @@
-require 'colorize'
 require_relative 'solver'
+require 'colorize'
+require 'pry-byebug'
 
 MAX_GUESS_COUNT = 6
 
@@ -57,15 +58,26 @@ def colorize_result(word, input)
 end
 
 def construct_input(target_word, suggested_word)
-  suggested_word.each_char.with_index.map do |suggested_word_char, suggested_word_index|
-    if target_word.include? suggested_word_char
-      if target_word[suggested_word_index] == suggested_word_char
-        'g'
-      else 'y'
-      end
-    else 'b'
+  target_word_letters = target_word.each_char.to_a
+  suggested_word_letters = suggested_word.each_char.to_a
+  input = Array.new target_word_letters.count
+  # Check for greens. Eliminate any matched.
+  0.upto(target_word_letters.count - 1).each do |n|
+    if suggested_word_letters[n] == target_word_letters[n]
+      input[n] = 'g'
+      target_word_letters[n] = nil
+      suggested_word_letters[n] = nil
     end
-  end.join
+  end
+  # Process yellow and black.
+  0.upto(target_word_letters.count - 1).each do |n|
+    next if input[n] == 'g'
+    if target_word_letters.include? suggested_word_letters[n]
+      input[n] = 'y'
+    else input[n] = 'b'
+    end
+  end
+  input.join
 end
 
 guesses_to_solve = {}
@@ -96,7 +108,7 @@ safest_starting_word = nil
         puts if solver.solved?
       end
       if solver.best_word.nil?
-        puts "Error: incorrect input #{input} constructed for target word #{target_word} and suggested word #{suggested_word}"
+        puts "Error: solver has nil best word based on input #{input} constructed for target word #{target_word} and suggested word #{suggested_word}"
         exit
       end
     end

@@ -9,7 +9,7 @@ if solver.best_word.nil?
   puts "Case failed! All possible alternates erroneously eliminated."
   exit
 end
-possible_alternates = %w[alder rider under wider]
+possible_alternates = %w[aider rider under wider]
 if possible_alternates.include? solver.best_word
   puts "Case passed!"
   exit
