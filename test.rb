@@ -23,7 +23,6 @@ if ARGV.any?
   if args.any? { |arg| arg == 'FIND_SAFEST_STARTING_WORD' }
     @find_safest_starting_word = true
     @testing_starting_word = true
-    @starting_words = wordlist.shuffle
     puts "Finding safest starting word."
   else
     args.each do |arg|
@@ -44,6 +43,20 @@ if @testing_single_word
     exit
   end
   wordlist = [@word_to_test]
+end
+
+
+least_failed_words = wordlist.count
+safest_starting_word = nil
+if @find_safest_starting_word
+  if File.file? 'safest_starting_word.txt'
+    word_data = File.read 'safest_starting_word.txt'
+    safest_starting_word = word_data.split(' ').first
+    least_failed_words = word_data.split(' ').last.to_i
+    starting_index = wordlist.index(safest_starting_word) + 1
+    @starting_words = wordlist[starting_index..-1]
+  else @starting_words = wordlist
+  end
 end
 
 def colorize_result(word, input)
@@ -84,12 +97,11 @@ guesses_to_solve = {}
 total_guesses = 0
 total_yellows = 0
 total_greens = 0
-least_failed_words = wordlist.count
-safest_starting_word = nil
 
 @starting_words.each do |starting_word|
   failed_words = []
-  puts "Testing starting word #{starting_word}. Current safest starting word: #{safest_starting_word}" if @find_safest_starting_word
+  puts "Testing starting word #{starting_word}." if @find_safest_starting_word
+  print " Current safest starting word: #{safest_starting_word} (#{least_failed_words})" if safest_starting_word
   wordlist.each.with_index(1) do |target_word, word_count| 
     guesses = 0
     solver = Solver.new
@@ -126,6 +138,9 @@ safest_starting_word = nil
     least_failed_words = failed_words.count
     safest_starting_word = starting_word
     puts "New safest starting word: #{safest_starting_word} (#{least_failed_words} failed words)."
+    File.open 'safest_starting_word.txt', 'w' do |file|
+      file.puts [safest_starting_word, least_failed_words.to_s].join(' ')
+    end
   end
 end
 
